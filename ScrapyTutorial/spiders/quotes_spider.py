@@ -10,6 +10,7 @@ class QuotesSpider(scrapy.Spider):
     #     ]
     #     for url in urls:
     #         yield scrapy.Request(url=url, callback=self.parse)
+
     start_urls = [
         'http://quotes.toscrape.com/page/1/',
     ]

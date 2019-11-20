@@ -16,4 +16,10 @@
     yield response.follow(next_page, callback=self.parse)
 ```
 
+### 四种常见爬虫
+1. CrawlSpider 方便用于追踪链接
+2. XMLFeedSpider 方便XML分析
+3. CSVSpider 按行读取csv文件
+4. SitemapSpider 爬取网站的sitemap信息
+
 
