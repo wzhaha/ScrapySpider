@@ -22,4 +22,10 @@
 3. CSVSpider 按行读取csv文件
 4. SitemapSpider 爬取网站的sitemap信息
 
+### 3种选择器
+1. css选择器
+    ![](./img/css选择器.png)
+2. xpath选择器
+3. 内置选择器
+
 
