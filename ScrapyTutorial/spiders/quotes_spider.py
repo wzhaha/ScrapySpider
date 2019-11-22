@@ -1,4 +1,6 @@
 import scrapy
+from scrapy.loader import ItemLoader
+from ..items import *
 
 class QuotesSpider(scrapy.Spider):
     name = "quotes"
@@ -17,11 +19,20 @@ class QuotesSpider(scrapy.Spider):
 
     def parse(self, response):
         for quote in response.css('div.quote'):
-            yield {
-                'text': quote.css('span.text::text').get(),
-                'author': quote.css('small.author::text').get(),
-                'tags': quote.css('div.tags a.tag::text').getall(),
-            }
+            quoteLoader = ItemLoader(item=QuoteItem(), selector=quote)
+            quoteLoader.add_css('text', 'span.text::text')
+            quoteLoader.add_css('author', 'small.author::text')
+            quoteLoader.add_css('tags', 'div.tags a.tag::text')
+
+            quoteInfo = quoteLoader.load_item()
+            print(quoteInfo)
+
+        # for quote in response.css('div.quote'):
+        #     yield {
+        #         'text': quote.css('span.text::text').get(),
+        #         'author': quote.css('small.author::text').get(),
+        #         'tags': quote.css('div.tags a.tag::text').getall(),
+        #     }
 
         next_page = response.css('li.next a::attr(href)').get()
         if next_page is not None:

@@ -1,4 +1,6 @@
 import scrapy
+from ..items import *
+from ..util.color_print import *
 
 
 class AuthorSpider(scrapy.Spider):
@@ -19,8 +21,11 @@ class AuthorSpider(scrapy.Spider):
         def extract_with_css(query):
             return response.css(query).get(default='').strip()
 
-        yield {
-            'name': extract_with_css('h3.author-title::text'),
-            'birthdate': extract_with_css('.author-born-date::text'),
-            'bio': extract_with_css('.author-description::text'),
-        }
+        author = Author()
+        author['name'] = extract_with_css('h3.author-title::text')
+        author['birthdate'] = extract_with_css('.author-born-date::text')
+        author['bio'] = extract_with_css('.author-description::text')
+        green_print(author)
+        yield author
+
+
