@@ -101,3 +101,58 @@ for quote in response.css('div.quote'):
             default_selector_class = Selector
     ```
 2. 重写，覆盖默认的处理机制
+
+### Scrapy shell
+有时，您希望检查在您的蜘蛛的某个点上正在处理的响应，如果只是检查您期望的响应是否到达那里的话。下面是一个案例
+   ```
+    import scrapy
+    
+    class MySpider(scrapy.Spider):
+        name = "myspider"
+        start_urls = [
+            "http://example.com",
+            "http://example.org",
+            "http://example.net",
+        ]
+    
+        def parse(self, response):
+            # We want to inspect one specific response.
+            if ".org" in response.url:
+                from scrapy.shell import inspect_response
+                inspect_response(response, self)
+    
+            # Rest of parsing code.
+   ```
+   
+
+### 项目管道
+#### 主要构成4个方法
+1. process_item(self, item, spider)
+    + 对每个项管道组件调用此方法。 process_item() 必须：返回包含数据的dict，返回 Item （或任何后代类）对象
+2. open_spider(self, spider)
+    + 当spider打开时调用此方法,只调用一次
+3. close_spider(self, spider)
+    + 当spider关闭时调用此方法,只调用一次
+4. from_crawler(cls, crawler)
+    + 不太懂
+#### 项目管道的作用
++ 清理HTML数据
++ 验证抓取的数据（检查项目是否包含某些字段）
++ 检查重复项（并删除它们）
++ 爬取的项目存储在数据库中
+
+保存到数据库的时候有两种方法，一种是同步，一种是异步操作，
+详见[https://www.cnblogs.com/knighterrant/p/10783634.html]
+
+
+### Feed导出
+见setting.py
+
+### 请求和相应
+
+### 链接提取器
+链接提取器是对象，其唯一目的是从网页中提取链接 (scrapy.http.Response 对象），
+最终将遵循。可以使用内置的方法从页面中提取需要的链接
+
+### 异常处理
+

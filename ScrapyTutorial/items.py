@@ -36,9 +36,16 @@ class ScrapytutorialItem(scrapy.Item):
 
 
 class QuoteItem(scrapy.Item):
-    text = scrapy.Field()
-    author = scrapy.Field()
-    tags = scrapy.Field()
+    text = scrapy.Field(
+        output_processor=TakeFirst()
+    )
+    author = scrapy.Field(
+        output_processor=TakeFirst()
+    )
+    tags = scrapy.Field(
+        input_processor=Join(","),
+        output_processor=TakeFirst()
+    )
 
 class Author(scrapy.Item):
     birthdate = scrapy.Field(serializer=str)

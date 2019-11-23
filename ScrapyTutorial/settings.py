@@ -14,12 +14,20 @@ BOT_NAME = 'ScrapyTutorial'
 SPIDER_MODULES = ['ScrapyTutorial.spiders']
 NEWSPIDER_MODULE = 'ScrapyTutorial.spiders'
 
+# 文件导出的路径当前目录下的export_data文件下
+FEED_URI = "ScrapyTutorial/out/%(name)s_%(time)s.json"
+
+# 输出文件的格式类型(JSON、CSV、XML)
+FEED_FORMAT = "json"
+
+# 输出文本编码格式(json默认格式不是utf - 8)
+FEED_EXPORT_ENCODING = "UTF-8"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ScrapyTutorial (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -64,9 +72,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'ScrapyTutorial.pipelines.ScrapytutorialPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   # 'ScrapyTutorial.pipelines.QuotePipeline': 50,
+   # 'ScrapyTutorial.pipelines.JsonWriterPipeline': 100,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html

@@ -29,6 +29,11 @@ class CssstudyspiderSpider(scrapy.Spider):
         #
         # yield item
 
+        # if "docs" in response.url:
+        #     from scrapy.shell import inspect_response
+        #     inspect_response(response, self)
+
+
         # 项目加载器的使用
         # 首先，声明项目加载器, 第一个参数必须是实例化的对象
         cssItemLoader = ItemLoader(item=CssItem(), response=response)
@@ -40,7 +45,8 @@ class CssstudyspiderSpider(scrapy.Spider):
 
         # 将提取好的数据load出来, 观察一下，发现三种方式填充的数据，均为List类型
         cssItemInfo = cssItemLoader.load_item()
-        print(cssItemInfo)
+
+        yield cssItemInfo
 
 
 

@@ -25,7 +25,8 @@ class QuotesSpider(scrapy.Spider):
             quoteLoader.add_css('tags', 'div.tags a.tag::text')
 
             quoteInfo = quoteLoader.load_item()
-            print(quoteInfo)
+
+            yield quoteInfo
 
         # for quote in response.css('div.quote'):
         #     yield {
