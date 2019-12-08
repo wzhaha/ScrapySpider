@@ -18,6 +18,8 @@ class QuotesSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
+        print(response.request.headers['User-Agent'])
+
         for quote in response.css('div.quote'):
             quoteLoader = ItemLoader(item=QuoteItem(), selector=quote)
             quoteLoader.add_css('text', 'span.text::text')

@@ -148,11 +148,63 @@ for quote in response.css('div.quote'):
 ### Feed导出
 见setting.py
 
-### 请求和相应
+### 请求和响应
+#### 向回调函数传递附加数据
+在某些情况下，您可能对向这些回调函数传递参数感兴趣，以便稍后在第二个回调中接收这些参数
+
+```
+    def parse(self, response):
+        request = scrapy.Request('http://www.example.com/index.html',
+                                 callback=self.parse_page2,
+                                 cb_kwargs=dict(main_url=response.url))
+        request.cb_kwargs['foo'] = 'bar'  # add more arguments for the callback
+        yield request
+
+    def parse_page2(self, response, main_url, foo):
+        yield dict(
+            main_url=main_url,
+            other_url=response.url,
+            foo=foo,
+        )
+```
+#### 使用formRequest.from_response（）模拟用户登录
+```
+import scrapy
+
+def authentication_failed(response):
+    # TODO: Check the contents of the response and return True if it failed
+    # or False if it succeeded.
+    pass
+
+class LoginSpider(scrapy.Spider):
+    name = 'example.com'
+    start_urls = ['http://www.example.com/users/login.php']
+
+    def parse(self, response):
+        return scrapy.FormRequest.from_response(
+            response,
+            formdata={'username': 'john', 'password': 'secret'},
+            callback=self.after_login
+        )
+
+    def after_login(self, response):
+        if authentication_failed(response):
+            self.logger.error("Login failed")
+            return
+```
+#### JSONRequest
+
+#### 响应子类
+1. TextResponse
+2. HtmlResponse
+3. XmlResponse
 
 ### 链接提取器
 链接提取器是对象，其唯一目的是从网页中提取链接 (scrapy.http.Response 对象），
 最终将遵循。可以使用内置的方法从页面中提取需要的链接
+
+### 设置
+
 
 ### 异常处理
 
