@@ -1,6 +1,10 @@
 import scrapy
 from scrapy.loader import ItemLoader
 from ..items import *
+import logging
+import time
+
+logger = logging.getLogger('mycustomlogger')
 
 class QuotesSpider(scrapy.Spider):
     name = "quotes"
@@ -17,10 +21,20 @@ class QuotesSpider(scrapy.Spider):
         'http://quotes.toscrape.com/page/1/',
     ]
 
+    def __init__(self, stats):
+        self.stats = stats
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        crawler.stats.set_value('hahacount', 0)
+        return cls(crawler.stats)
+
     def parse(self, response):
         print(response.request.headers['User-Agent'])
-
         for quote in response.css('div.quote'):
+            time.sleep(3)
+            logger.info('Parse function called on %s', response.url)
+            self.stats.inc_value('hahacount')
             quoteLoader = ItemLoader(item=QuoteItem(), selector=quote)
             quoteLoader.add_css('text', 'span.text::text')
             quoteLoader.add_css('author', 'small.author::text')
@@ -37,10 +51,10 @@ class QuotesSpider(scrapy.Spider):
         #         'tags': quote.css('div.tags a.tag::text').getall(),
         #     }
 
-        next_page = response.css('li.next a::attr(href)').get()
-        if next_page is not None:
-            # next_page = response.urljoin(next_page)
-            # yield scrapy.Request(next_page, callback=self.parse)
-            yield response.follow(next_page, callback=self.parse)
+        # next_page = response.css('li.next a::attr(href)').get()
+        # if next_page is not None:
+        #     # next_page = response.urljoin(next_page)
+        #     # yield scrapy.Request(next_page, callback=self.parse)
+        #     yield response.follow(next_page, callback=self.parse)
 
 

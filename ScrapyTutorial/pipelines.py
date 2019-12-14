@@ -8,6 +8,7 @@
 from scrapy.exceptions import DropItem
 import json
 import pymysql
+from scrapy.mail import MailSender
 
 
 class ScrapytutorialPipeline(object):
@@ -58,3 +59,14 @@ class JsonWriterPipeline(object):
         line = json.dumps(item['author']) + "\n"
         self.file.write(line)
         return item
+
+class NotificationPipline(object):
+
+    def open_spider(self, spider):
+        self.mailer = MailSender(smtphost='smtp.qq.com', mailfrom='1063373512@qq.com', smtpport=25, smtpuser='1063373512@qq.com', smtppass='ccbzuebgcsbobcjc')
+
+    def process_item(self, item, spider):
+        return item
+
+    def close_spider(self, spider):
+        return self.mailer.send(to=['16301133@bjtu.edu.cn'], subject='Test', body='哈哈，你的爬虫跑完了')

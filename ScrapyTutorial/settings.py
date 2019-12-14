@@ -66,15 +66,20 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
-#    'scrapy.extensions.telnet.TelnetConsole': None,
-#}
+EXTENSIONS = {
+   # 'scrapy.extensions.telnet.TelnetConsole': None,
+   #  'scrapy_jsonrpc.webservice.WebService': 500,
+}
+# JSONRPC_ENABLED = True
+# JSONRPC_PORT = [6025]
+
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    # 'ScrapyTutorial.pipelines.QuotePipeline': 50,
    # 'ScrapyTutorial.pipelines.JsonWriterPipeline': 100,
+   'ScrapyTutorial.pipelines.NotificationPipline': 100,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -116,3 +121,10 @@ CUSTOM_USER_AGENT = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.20 (KHTML, like Gecko) Chrome/19.0.1036.7 Safari/535.20",
     "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52",
 ]
+
+# 日志配置
+# LOG_ENABLED = True #是否启动日志记录，默认True
+# LOG_ENCODING = 'UTF-8'
+# LOG_FILE = "log/log.log"#日志输出文件，如果为NONE，就打印到控制台
+# LOG_LEVEL = 'DEBUG'#日志级别，默认debug
+# LOG_STDOUT = False

@@ -207,4 +207,65 @@ class LoginSpider(scrapy.Spider):
 
 
 ### 异常处理
+1. DropItem
+    + 只能在管道中使用
+    + eg:raise DropItem('字段成分缺失')
+2. CloseSpider
+    + 可以从蜘蛛回调中引发此异常以请求关闭/停止蜘蛛
+    + raise CloseSpider('关闭的原因')
+3. 还有一些其他的异常：
+    
+
+## 内置服务
+### 日志
+#### 等级
+1. logging.CRITICAL -对于严重错误（严重性最高）
+2. logging.ERROR -对于常规错误
+3. logging.WARNING -用于警告消息
+4. logging.INFO -以获取信息性消息
+5. logging.DEBUG -用于调试消息（最低严重性）
+#### 日志设置
+1. LOG_ENABLED = True #是否启动日志记录，默认True
+2. LOG_ENCODING = 'UTF-8'
+3. LOG_FILE = "log/log.log"#日志输出文件，如果为NONE，就打印到控制台
+4. LOG_LEVEL = 'DEBUG'#日志级别，默认debug
+5. LOG_STDOUT = False
+
+### 统计数据集合
+#### 使用
+```
+class ExtensionThatAccessStats(object):
+
+    def __init__(self, stats):
+        self.stats = stats
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(crawler.stats)
+```
+1. 设置统计值：stats.set_value('hostname', socket.gethostname())
+2. 增量统计值：stats.inc_value('custom_count')
+3. 获取统计值：stats.get_value('custom_count')
+4. 还有很多其他的，详见文档
+
+### 发送电子邮件
+1. 使用scrapy内置的scrapy.mail或者smtp都可以
+2. 可以在爬虫结束的时候进行通知
+3. 通过twisted的非阻塞IO实现,可以直接写在spider中，也可以写在中间件或者扩展中
+
+### 远程登录控制台
+通过telnet远程连接查看状
+### web 服务
+目前官方已停止更新，下载之后不可用,
+
+## 其他
+### 实践经验
+1. 分布式爬行
+2. 使用user agent池
+3. 禁止cookies(参考 COOKIES_ENABLED)，有些站点会使用cookies来发现爬虫的轨迹。
+4. 设置下载延迟(2或更高)
+5. 使用 Google cache 来爬取数据
+6. 使用IP池
+7. 使用高度分布式的下载器(downloader)来绕过禁止(ban)，您就只需要专注分析处理页面。
+案例: http://scrapinghub.com/crawlera
 
