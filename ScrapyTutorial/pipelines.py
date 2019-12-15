@@ -9,6 +9,8 @@ from scrapy.exceptions import DropItem
 import json
 import pymysql
 from scrapy.mail import MailSender
+from scrapy.pipelines.images import ImagesPipeline
+import scrapy
 
 
 class ScrapytutorialPipeline(object):
@@ -70,3 +72,18 @@ class NotificationPipline(object):
 
     def close_spider(self, spider):
         return self.mailer.send(to=['16301133@bjtu.edu.cn'], subject='Test', body='哈哈，你的爬虫跑完了')
+
+
+class MyImagePipeline(ImagesPipeline):  # 继承ImagesPipeline这个类
+
+    def get_media_requests(self, item, info):
+        for image_url in item['image_urls']:
+            image_url = "http:" + image_url
+            yield scrapy.Request(image_url)
+
+    def item_completed(self, results, item, info):
+        print(results)
+        image_paths = [x['path'] for ok, x in results if ok]
+        if not image_paths:
+            raise DropItem("Item contains no images")
+        return item

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from ..util.color_print import *
 from scrapy.loader import ItemLoader
-
+from ..items import *
 
 class CssstudyspiderSpider(scrapy.Spider):
     name = 'CssStudySpider'

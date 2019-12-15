@@ -35,6 +35,8 @@ Item提供保存抓取到数据的容器，而 Itemloader提供的是填充容�
 
 注意：ItemLoader可以传递的参数有item=None, selector=None, response=None，如果是循环Selector
 的时候，就可以传selector
+
+
 ```
 for quote in response.css('div.quote'):
         quoteLoader = ItemLoader(item=QuoteItem(), selector=quote)
@@ -53,6 +55,8 @@ for quote in response.css('div.quote'):
 #### scrapy内置的处理器:
 1. TakeFirst: 是Scrapy提供的内置处理器，用于提取List中的第一个非空元素
 2. MapCompose: 能把多个函数执行的结果按顺序组合起来，产生最终的输出，通常用于输入处理器
+
+
     ```
     # 单独直接使用
     from scrapy.loader.processors import MapCompose
@@ -104,6 +108,8 @@ for quote in response.css('div.quote'):
 
 ### Scrapy shell
 有时，您希望检查在您的蜘蛛的某个点上正在处理的响应，如果只是检查您期望的响应是否到达那里的话。下面是一个案例
+
+
    ```
     import scrapy
     
@@ -151,6 +157,8 @@ for quote in response.css('div.quote'):
 ### 请求和响应
 #### 向回调函数传递附加数据
 在某些情况下，您可能对向这些回调函数传递参数感兴趣，以便稍后在第二个回调中接收这些参数
+
+
 
 ```
     def parse(self, response):
@@ -268,4 +276,46 @@ class ExtensionThatAccessStats(object):
 6. 使用IP池
 7. 使用高度分布式的下载器(downloader)来绕过禁止(ban)，您就只需要专注分析处理页面。
 案例: http://scrapinghub.com/crawlera
+
+### 通用爬虫
+1. 在爬取一些类似的网站时，不用写很多的爬虫，使用CrawlSpider，自定义不同网站的规则，可以将配置抽取到json文件中，启动的时候读取
+
+
+### 动态加载内容处理
+1. 如果响应是基于图像的图像或其他格式（例如PDF），则从 response.body 并使用OCR解决方案将所需数据提取为文本。
+可以使用 pytesseract或者tabula-py(见github)
+2. 分析javascript代码
+    + 如果javascript代码在javascript文件中，只需读取 response.text
+    + 如果javascript代码在script内，使用 selectors 提取其中的文本script元素。
+    + 使用 regular expression 以JSON格式提取所需数据，然后可以使用 json.loads
+    + 使用 js2xml 要将javascript代码转换为XML文档(个人感觉这种的好点儿)
+3. 预渲染JavaScript 使用scrapy-splash，案例地址：https://blog.csdn.net/qq_23518237/article/details/80722150
+
+### 下载和处理文件和图像
+使用媒体管道(文件管道或者图像管道)，实现了两个功能
+1. 避免重新下载最近下载的媒体
+2. 指定存储媒体的位置
+
+#### 启用
+1. 图像管道: 
+    + ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 1}
+    + IMAGES_STORE = '/path/to/valid/dir'
+2. 文件管道: 
+    + ITEM_PIPELINES = {'scrapy.pipelines.files.FilesPipeline': 1}
+    + FILES_STORE = '/path/to/valid/dir'
+
+不设置存储路径将默认处于禁用状态
+详细操作运行案例：scrapy crawl jiandan 
+
+
+
+
+
+
+## **待学习**
+1. 禁止cookies
+2. 使用IP池
+3. 使用scrapy-splash
+
+
 

@@ -15,7 +15,7 @@ SPIDER_MODULES = ['ScrapyTutorial.spiders']
 NEWSPIDER_MODULE = 'ScrapyTutorial.spiders'
 
 # 文件导出的路径当前目录下的export_data文件下
-FEED_URI = "out/%(name)s_%(time)s.json"
+FEED_URI = "ScrapyTutorial/out/%(name)s_%(time)s.json"
 
 # 输出文件的格式类型(JSON、CSV、XML)
 FEED_FORMAT = "json"
@@ -27,7 +27,7 @@ FEED_EXPORT_ENCODING = "UTF-8"
 #USER_AGENT = 'ScrapyTutorial (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -79,8 +79,20 @@ EXTENSIONS = {
 ITEM_PIPELINES = {
    # 'ScrapyTutorial.pipelines.QuotePipeline': 50,
    # 'ScrapyTutorial.pipelines.JsonWriterPipeline': 100,
-   'ScrapyTutorial.pipelines.NotificationPipline': 100,
+   # 'ScrapyTutorial.pipelines.NotificationPipline': 100,
+    'ScrapyTutorial.pipelines.MyImagePipeline': 1,
+    # 'scrapy.pipelines.images.ImagesPipeline': 1,
+    # 'scrapy.pipelines.files.FilesPipeline': 2,
 }
+
+IMAGES_STORE = '/Users/wzhaha/PycharmProjects/ScrapyTutorial/ScrapyTutorial/images'
+
+# 设置缩略图
+IMAGES_THUMBS = {
+    'small': (50, 50),
+    'big': (250, 250),
+}
+
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
