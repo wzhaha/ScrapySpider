@@ -308,7 +308,40 @@ class ExtensionThatAccessStats(object):
 详细操作运行案例：scrapy crawl jiandan 
 
 
+## 拓展
+### Architecture overview
+![](img/scrapy_architecture.png)
+some detail about the process of data flow can be seen in the website.
+### 下载器中间件
 
+1. DOWNLOADER_MIDDLEWARES_BASE,自定义中间件的时候要注意优先级的顺序，
+如果要禁用内置的中间件的时候，在setting中的中间件设置中设置其为None
+    ```
+    {
+        'scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware': 100,
+        'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware': 300,
+        'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware': 350,
+        'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': 400,
+        'scrapy.downloadermiddlewares.retry.RetryMiddleware': 500,
+        'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': 550,
+        'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware': 580,
+        'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 590,
+        'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': 600,
+        'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': 700,
+        'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 750,
+        'scrapy.downloadermiddlewares.chunked.ChunkedTransferMiddleware': 830,
+        'scrapy.downloadermiddlewares.stats.DownloaderStats': 850,
+        'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 900,
+    }
+
+    ```
+2. 自定义下载器中间件
+
+3. 内置Downloader Middleware
+
+### spider middleware
+
+## 到这儿就基本学完了，还有一些更深层次的就懒的去看了，用到的时候再说吧(什么signal啊，extension啊···)
 
 
 
